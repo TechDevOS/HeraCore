@@ -46,9 +46,9 @@ public class InfCommand implements CommandExecutor {
             }
             sender.sendMessage("\n§cMuet : " + isMuted);
             sender.sendMessage("§cBanni : " + isBanned);
-            sender.sendMessage("§6Ban(s) : §l§e" + getBans(targetUUID));
-            sender.sendMessage("§6Mute(s) : §l§e" + getMutes(targetUUID));
-            sender.sendMessage("§6Warn(s) : §l§e" + getWarns(targetUUID));
+            sender.sendMessage("§6Ban(s) : §l§e" + getBansCount(targetUUID));
+            sender.sendMessage("§6Mute(s) : §l§e" + getMutesCount(targetUUID));
+            sender.sendMessage("§6Warn(s) : §l§e" + getWarnsCount(targetUUID));
 
 
             sender.sendMessage("\n§7" + ChatColor.STRIKETHROUGH + "---------------------------------------------------");
@@ -58,7 +58,7 @@ public class InfCommand implements CommandExecutor {
         return true;
     }
 
-    public int getBans(UUID playerUUID) {
+    public static int getBansCount(UUID playerUUID) {
         try {
             PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT COUNT(*) AS total FROM mod_history WHERE (player_uuid=? AND type=?)");
             sts.setString(1, playerUUID.toString());
@@ -74,7 +74,7 @@ public class InfCommand implements CommandExecutor {
         throw new NullPointerException("Le joueur n'a pas d'informations dans la table");
     }
 
-    public int getMutes(UUID playerUUID) {
+    public static int getMutesCount(UUID playerUUID) {
         try {
             PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT COUNT(*) AS total FROM mod_history WHERE (player_uuid=? AND type=?)");
             sts.setString(1, playerUUID.toString());
@@ -90,7 +90,7 @@ public class InfCommand implements CommandExecutor {
         throw new NullPointerException("Le joueur n'a pas d'informations dans la table");
     }
 
-    public int getWarns(UUID playerUUID) {
+    public static int getWarnsCount(UUID playerUUID) {
         try {
             PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT COUNT(*) AS total FROM mod_history WHERE (player_uuid=? AND type=?)");
             sts.setString(1, playerUUID.toString());
@@ -106,7 +106,7 @@ public class InfCommand implements CommandExecutor {
         throw new NullPointerException("Le joueur n'a pas d'informations dans la table");
     }
 
-    public String helpMessage() {
+    private String helpMessage() {
         return "§cSyntaxe : /inf <joueur>";
     }
 

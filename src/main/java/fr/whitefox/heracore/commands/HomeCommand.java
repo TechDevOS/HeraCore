@@ -2,9 +2,7 @@ package fr.whitefox.heracore.commands;
 
 import fr.whitefox.heracore.Main;
 import fr.whitefox.heracore.db.HomeManager;
-import fr.whitefox.heracore.db.PlayerInfos;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,10 +19,10 @@ public class HomeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
 
-        if (cmd.getName().equalsIgnoreCase("home")) {
+        if (!(sender instanceof Player)) return false;
+        Player player = (Player) sender;
 
-            if (!(sender instanceof Player)) return false;
-            Player player = (Player) sender;
+        if (cmd.getName().equalsIgnoreCase("home")) {
 
             if (args.length == 0) {
                 player.sendMessage("§6[§9Hera§6] §cVeuillez spécifier un home");
@@ -52,18 +50,13 @@ public class HomeCommand implements CommandExecutor {
         }
 
         if (cmd.getName().equalsIgnoreCase("homes")) {
-
-
-            return true;
+            player.sendMessage(getHomes(String.valueOf(player.getUniqueId())));
         }
 
         if (cmd.getName().equalsIgnoreCase("sethome")) {
 
-            if (!(sender instanceof Player)) return false;
-            Player player = (Player) sender;
-
             if (args.length == 0) {
-                player.sendMessage("§6[§9Hera§6] §cVeuillez spécifier un home");
+                player.sendMessage("§6[§9Hera§6] §cVeuillez spécifier un nom de home");
                 return false;
             }
 
@@ -96,35 +89,13 @@ public class HomeCommand implements CommandExecutor {
             }
 
             if (args.length == 1) {
-                if (sender instanceof Player) {
-                    Player player = (Player) sender;
-
-                    if (!(HomeManager.exist(player.getUniqueId(), args[0]))) {
-                        player.sendMessage("§6[§9Hera§6] §cAucun de vos homes ne portent le nom de §6§l" + args[0] + "§c !");
-                        return false;
-                    } else {
-                        HomeManager.delete(player.getUniqueId(), args[0]);
-                        player.sendMessage("§6[§9Hera§6] §aVotre home portant le nom §6§l" + args[0] + "§a a bien été supprimé.");
-                        return true;
-                    }
+                if (!(HomeManager.exist(player.getUniqueId(), args[0]))) {
+                    player.sendMessage("§6[§9Hera§6] §cAucun de vos homes ne portent le nom de §6§l" + args[0] + "§c !");
+                    return false;
                 } else {
-                    sender.sendMessage("§6[§9Hera§6] §cVeuillez spécifier un joueur ainsi qu'un home !");
-                }
-
-            } else {
-                if (sender.hasPermission("hera.home.others")) {
-                    if (!(PlayerInfos.exist(args[0]))) {
-                        sender.sendMessage(ChatColor.RED + "Le joueur n'existe pas ou ne s'est jamais connecté !");
-                        return false;
-                    }
-                    if (!(HomeManager.exist(PlayerInfos.getUUID(args[0]), args[1]))) {
-                        sender.sendMessage("§6[§9Hera§6] §cAucun des homes de §6§l" + args[0] + "§a ne portent le nom de §6§l" + args[1] + "§c !");
-                        return false;
-                    } else {
-                        HomeManager.delete(PlayerInfos.getUUID(args[0]), args[1]);
-                        sender.sendMessage("§6[§9Hera§6] §aLe home de §6§l" + args[0] + "§a portant le nom §6§l" + args[1] + "§a a bien été supprimé.");
-                        return true;
-                    }
+                    HomeManager.delete(player.getUniqueId(), args[0]);
+                    player.sendMessage("§6[§9Hera§6] §aVotre home portant le nom §6§l" + args[0] + "§a a bien été supprimé.");
+                    return true;
                 }
             }
         }
@@ -142,6 +113,25 @@ public class HomeCommand implements CommandExecutor {
             if (rs.next()) {
                 return rs.getString("coordinates");
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new NullPointerException("Le joueur n'a pas d'informations dans la table");
+    }
+
+    public String getHomes(String playerUUID) {
+        try {
+            PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT * FROM homes WHERE player_uuid=?");
+            sts.setString(1, String.valueOf(playerUUID));
+            ResultSet rs = sts.executeQuery();
+
+            StringBuilder result = new StringBuilder("§l§e[§6§lHOMES§l§e]§r : ");
+
+            while (rs.next()) {
+                result.append("\n§r- §e§l").append(rs.getString("home_name"));
+            }
+
+            return result.toString();
         } catch (SQLException e) {
             e.printStackTrace();
         }
