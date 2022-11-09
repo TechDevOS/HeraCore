@@ -16,6 +16,54 @@ import java.util.UUID;
 
 public class InfCommand implements CommandExecutor {
 
+    public static int getBansCount(UUID playerUUID) {
+        try {
+            PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT COUNT(*) AS total FROM mod_history WHERE (player_uuid=? AND type=?)");
+            sts.setString(1, playerUUID.toString());
+            sts.setString(2, "BAN");
+            ResultSet rs = sts.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new NullPointerException("Le joueur n'a pas d'informations dans la table");
+    }
+
+    public static int getMutesCount(UUID playerUUID) {
+        try {
+            PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT COUNT(*) AS total FROM mod_history WHERE (player_uuid=? AND type=?)");
+            sts.setString(1, playerUUID.toString());
+            sts.setString(2, "MUTE");
+            ResultSet rs = sts.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new NullPointerException("Le joueur n'a pas d'informations dans la table");
+    }
+
+    public static int getWarnsCount(UUID playerUUID) {
+        try {
+            PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT COUNT(*) AS total FROM mod_history WHERE (player_uuid=? AND type=?)");
+            sts.setString(1, playerUUID.toString());
+            sts.setString(2, "WARN");
+            ResultSet rs = sts.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new NullPointerException("Le joueur n'a pas d'informations dans la table");
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
 
@@ -56,54 +104,6 @@ public class InfCommand implements CommandExecutor {
         }
 
         return true;
-    }
-
-    public static int getBansCount(UUID playerUUID) {
-        try {
-            PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT COUNT(*) AS total FROM mod_history WHERE (player_uuid=? AND type=?)");
-            sts.setString(1, playerUUID.toString());
-            sts.setString(2, "ban");
-            ResultSet rs = sts.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("total");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        throw new NullPointerException("Le joueur n'a pas d'informations dans la table");
-    }
-
-    public static int getMutesCount(UUID playerUUID) {
-        try {
-            PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT COUNT(*) AS total FROM mod_history WHERE (player_uuid=? AND type=?)");
-            sts.setString(1, playerUUID.toString());
-            sts.setString(2, "mute");
-            ResultSet rs = sts.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("total");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        throw new NullPointerException("Le joueur n'a pas d'informations dans la table");
-    }
-
-    public static int getWarnsCount(UUID playerUUID) {
-        try {
-            PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT COUNT(*) AS total FROM mod_history WHERE (player_uuid=? AND type=?)");
-            sts.setString(1, playerUUID.toString());
-            sts.setString(2, "warn");
-            ResultSet rs = sts.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("total");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        throw new NullPointerException("Le joueur n'a pas d'informations dans la table");
     }
 
     private String helpMessage() {
