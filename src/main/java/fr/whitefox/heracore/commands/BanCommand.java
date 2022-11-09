@@ -53,7 +53,7 @@ public class BanCommand implements CommandExecutor {
             }
 
             long banTime = getTime(args[1]);
-            String finalBanTime = getTimeBan(banTime);
+            String finalBanTime = getSanctionTime(banTime);
             if (finalBanTime.equalsIgnoreCase("")) {
                 sender.sendMessage("§cVous devez entrer une valeure valide !");
                 return false;
@@ -146,7 +146,7 @@ public class BanCommand implements CommandExecutor {
         }
     }
 
-    private String getTimeBan(long tempsRestant) {
+    public static String getSanctionTime(long tempsRestant) {
         int jours = 0;
         int heures = 0;
         int minutes = 0;
