@@ -22,7 +22,7 @@ public class HistoryManager {
             sts.setString(3, reason);
             sts.setString(4, moderator);
             sts.setLong(5, System.currentTimeMillis());
-            sts.setString(6, "ban");
+            sts.setString(6, "BAN");
             sts.executeUpdate();
 
             getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[Hera DB] Insert ban log of " + uuid);
@@ -42,7 +42,7 @@ public class HistoryManager {
             sts.setString(3, "none");
             sts.setString(4, moderator);
             sts.setLong(5, System.currentTimeMillis());
-            sts.setString(6, "unban");
+            sts.setString(6, "UNBAN");
             sts.executeUpdate();
 
             getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[Hera DB] Insert unban log of " + uuid);
@@ -61,7 +61,7 @@ public class HistoryManager {
             sts.setString(3, reason);
             sts.setString(4, moderator);
             sts.setLong(5, System.currentTimeMillis());
-            sts.setString(6, "mute");
+            sts.setString(6, "MUTE");
             sts.executeUpdate();
 
             getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[Hera DB] Insert mute log of " + uuid);
@@ -81,7 +81,7 @@ public class HistoryManager {
             sts.setString(3, "none");
             sts.setString(4, moderator);
             sts.setLong(5, System.currentTimeMillis());
-            sts.setString(6, "unmute");
+            sts.setString(6, "UNMUTE");
             sts.executeUpdate();
 
             getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[Hera DB] Insert unmute log of " + uuid);
@@ -101,7 +101,7 @@ public class HistoryManager {
             sts.setString(3, reason);
             sts.setString(4, moderator);
             sts.setLong(5, System.currentTimeMillis());
-            sts.setString(6, "warn");
+            sts.setString(6, "WARN");
             sts.executeUpdate();
 
             getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[Hera DB] Insert warn log of " + uuid);
