@@ -13,6 +13,48 @@ import static org.bukkit.Bukkit.getServer;
 
 public class PlayerInfos {
 
+    public static boolean exist(String playerName) {
+        try {
+            PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT * FROM player_infos WHERE player_name=?");
+            sts.setString(1, playerName);
+            ResultSet rs = sts.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static UUID getUUID(String playerName) {
+        try {
+            PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT player_uuid FROM player_infos WHERE player_name=?");
+            sts.setString(1, playerName);
+            ResultSet rs = sts.executeQuery();
+
+            if (rs.next()) {
+                return UUID.fromString(rs.getString("player_uuid"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new NullPointerException("Le joueur n'a pas d'informations dans la table");
+    }
+
+    public static String getName(String playerUUID) {
+        try {
+            PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT player_name FROM player_infos WHERE player_uuid=?");
+            sts.setString(1, playerUUID);
+            ResultSet rs = sts.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("player_name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new NullPointerException("Le joueur n'a pas d'informations dans la table");
+    }
+
     public void update(Player player) {
         try {
             PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT player_name FROM player_infos WHERE player_uuid=?");
@@ -104,33 +146,6 @@ public class PlayerInfos {
 
             if (rs.next()) {
                 return rs.getLong("last_connection");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        throw new NullPointerException("Le joueur n'a pas d'informations dans la table");
-    }
-
-    public static boolean exist(String playerName) {
-        try {
-            PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT * FROM player_infos WHERE player_name=?");
-            sts.setString(1, playerName);
-            ResultSet rs = sts.executeQuery();
-            return rs.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public static UUID getUUID(String playerName) {
-        try {
-            PreparedStatement sts = Main.getInstance().sqlite.getConnection().prepareStatement("SELECT player_uuid FROM player_infos WHERE player_name=?");
-            sts.setString(1, playerName);
-            ResultSet rs = sts.executeQuery();
-
-            if (rs.next()) {
-                return UUID.fromString(rs.getString("player_uuid"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
