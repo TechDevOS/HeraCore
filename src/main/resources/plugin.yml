@@ -72,6 +72,9 @@ commands:
   inf:
     description: Donne les informations générales d'un joueur
     permission: hera.inf
+  history:
+    description: Permet d'obtenir l'historique d'un joueur
+    permission: hera.history
   warn:
     description: Permet d'avertir un utilisateur
     permission: hera.warn

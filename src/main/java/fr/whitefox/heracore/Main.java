@@ -81,6 +81,7 @@ public class Main extends JavaPlugin {
         getCommand("mute").setExecutor(new MuteCommand());
         getCommand("unmute").setExecutor(new MuteCommand());
         getCommand("inf").setExecutor(new InfCommand());
+        getCommand("history").setExecutor(new HistoryCommand());
         getCommand("warn").setExecutor(new WarnCommand());
         getCommand("back").setExecutor(new BackCommand());
         getCommand("home").setExecutor(new HomeCommand());
