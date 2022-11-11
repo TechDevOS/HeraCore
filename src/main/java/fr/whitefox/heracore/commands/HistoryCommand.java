@@ -54,15 +54,15 @@ public class HistoryCommand implements CommandExecutor {
 
             while (rs.next()) {
                 String duration = BanCommand.getSanctionTime(rs.getLong("duration"));
-                Timestamp ts = new Timestamp(rs.getLong("time"));
+                String date = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date (rs.getLong("time")));
                 String moderator = getModeratorName(rs.getString("moderator"));
                 String type = rs.getString("type");
 
-                result.append("\n§r - §c").append(type);
+                result.append("\n§r - §c§l").append(type);
                 if (rs.getLong("duration") != -1) {
-                    result.append("§r d'une durée de §e").append(duration);
+                    result.append("§r d'une durée de §e§l").append(duration);
                 }
-                result.append("§r par §6§l").append(moderator).append("§r le §d").append(ts);
+                result.append("§r par §6§l").append(moderator).append("§r le §d").append(date);
                 if (rs.getLong("duration") != -1) {
                     result.append("§r pour la raison suivante : §a").append(rs.getString("reason"));
                 }

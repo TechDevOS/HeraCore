@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
@@ -122,8 +123,7 @@ public class InfCommand implements CommandExecutor {
         if (Bukkit.getPlayer(playerUUID) != null) {
             return "§a§lJoueur actuellement connecté";
         } else {
-            Date lastConnection = new Date(Main.getInstance().playerInfos.getLastConnexion(playerUUID));
-            return lastConnection.toString();
+            return new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date (Main.getInstance().playerInfos.getLastConnexion(playerUUID)));
         }
     }
 }
